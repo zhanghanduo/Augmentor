@@ -800,12 +800,21 @@ class Pipeline(object):
 
         print("Images: %s" % len(self.augmentor_images))
 
-        label_pairs = sorted(set([x.label_pair for x in self.augmentor_images]))
+        # TODO: find a better way that doesn't need to iterate over every image
+        # TODO: get rid of this label_pair property as nowhere else uses it
+        # Check if we have any labels before printing label information.
+        label_count = 0
+        for image in self.augmentor_images:
+            if image.label_pair is not None:
+                label_count += 1
 
-        print("Classes: %s" % len(label_pairs))
+        if len(label_count) != 0:
+            label_pairs = sorted(set([x.label_pair for x in self.augmentor_images]))
 
-        for label_pair in label_pairs:
-            print ("\tClass index: %s Class label: %s " % (label_pair[0], label_pair[1]))
+            print("Classes: %s" % len(label_pairs))
+
+            for label_pair in label_pairs:
+                print ("\tClass index: %s Class label: %s " % (label_pair[0], label_pair[1]))
 
         if len(self.augmentor_images) != 0:
             print("Dimensions: %s" % len(self.distinct_dimensions))
