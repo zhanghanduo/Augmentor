@@ -634,7 +634,7 @@ class RotateStandard(Operation):
     .. seealso:: For 90 degree rotations, see the :class:`Rotate` class.
     """
 
-    def __init__(self, probability, max_left_rotation, max_right_rotation, expand=False):
+    def __init__(self, probability, max_left_rotation, max_right_rotation, expand=False, fillcolor=None):
         """
         Documentation to appear.
         """
@@ -642,6 +642,7 @@ class RotateStandard(Operation):
         self.max_left_rotation = -abs(max_left_rotation)   # Ensure always negative
         self.max_right_rotation = abs(max_right_rotation)  # Ensure always positive
         self.expand = expand
+        self.fillcolor = fillcolor
 
     def perform_operation(self, images):
         """
@@ -665,7 +666,7 @@ class RotateStandard(Operation):
             rotation = random_right
 
         def do(image):
-            return image.rotate(rotation, expand=self.expand, resample=Image.BICUBIC)
+            return image.rotate(rotation, expand=self.expand, resample=Image.BICUBIC, fillcolor=self.fillcolor)
 
         augmented_images = []
 
