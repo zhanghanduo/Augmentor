@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='Augmentor',
     packages=['Augmentor'],
-    version='0.2.3',
+    version='0.2.4',
     description='Image augmentation library for Machine Learning',
     long_description='Image augmentation library for Machine Learning',
     license='MIT',
@@ -14,7 +14,7 @@ setup(
     keywords=['image', 'augmentation', 'artificial', 'generation', 'machine', 'learning'],
     include_package_data=True,  # This will include all files in MANIFEST.in in the package when installing.
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'License :: OSI Approved :: MIT License',
