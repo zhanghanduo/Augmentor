@@ -333,7 +333,7 @@ from the command line. To view the CI tests that are run after each commit, see 
 ## Citing Augmentor
 If you find this package useful and wish to cite it, you can use
 
-Marcus D. Bloice, Christof Stocker, and Andreas Holzinger, *Augmentor: An Image Augmentation Library for Machine Learning*, arXiv preprint **arXiv:1708.04680**, <https://arxiv.org/abs/1708.04680>, 2017.
+Marcus D Bloice, Peter M Roth, Andreas Holzinger, Biomedical image augmentation using Augmentor, *Bioinformatics*, <https://doi.org/10.1093/bioinformatics/btz259>
 
 ## Asciicast
 
