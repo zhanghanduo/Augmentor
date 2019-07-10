@@ -808,7 +808,7 @@ class Pipeline(object):
             if image.label_pair is not None:
                 label_count += 1
 
-        if len(label_count) != 0:
+        if label_count != 0:
             label_pairs = sorted(set([x.label_pair for x in self.augmentor_images]))
 
             print("Classes: %s" % len(label_pairs))
