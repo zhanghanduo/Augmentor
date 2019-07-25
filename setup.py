@@ -29,7 +29,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     install_requires=[
-        'Pillow>=4.0.0',
+        'Pillow>=5.2.0',
         'tqdm>=4.9.0',
         'future>=0.16.0',
         'numpy>=1.11.0',
