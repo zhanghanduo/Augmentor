@@ -2028,3 +2028,103 @@ class ZoomGroundTruth(Operation):
             augmented_images.append(do(image))
 
         return augmented_images
+
+
+class Mixup(Operation):
+    """
+    Implements the *mixup* augmentation method, as described in:
+
+    Zhang et al. (2018), *mixup*: Beyond Empirical Risk Minimization,
+    arXiv:1710.09412
+
+    See `http://arxiv.org/abs/1710.09412 <http://arxiv.org/abs/1710.09412>`_
+    for details.
+
+    Also see `https://github.com/facebookresearch/mixup-cifar10 <https://github.com/facebookresearch/mixup-cifar10>`_
+    for code which was followed to create this functionality in Augmentor.
+
+    The *mixup* augmentation technique trains a neural network on
+    "*combinations of pairs of examples and their labels*" (Zhang et al., 2018).
+
+    In summary, *mixup* constructs training samples as follows:
+
+    .. math::
+        \\tilde{x} = \\lambda x_i + (1-\\lambda)x_j
+    .. math::
+        \\tilde{y} = \\lambda y_i + (1-\\lambda)y_j
+
+    where :math:`(x_i, y_i)` and :math:`(x_j, y_j)` are two samples from
+    the training data, :math:`x_i, x_j` are raw input vectors,
+    :math:`y_i, y_j` are one-hot label encodings (such as [0.0, 1.0]), and
+    :math:`\\lambda \\in [0, 1]` where :math:`\\lambda` is sampled randomly
+    from the Beta distribution, :math:`\\beta(\\alpha, \\alpha)`.
+
+    The :math:`\\alpha` hyper-parameter controls the strength of the
+    interpolation between image-label pairs, where
+    :math:`\\alpha \in \\{0, \\infty \\}`
+
+    According to the paper referenced above, values for :math:`\\alpha`
+    between 0.1 and 0.4 led to best performance. Smaller values for
+    :math:`\\alpha` result in less *mixup* effect where larger values would
+    tend to result in overfitting.
+    """
+    def __init__(self, probability, alpha=0.4):
+        """
+        Performs the *mixit* augmentation technique.
+
+        .. note:: Not yet enabled!
+            This function is currently implemented but not **enabled**, as it
+            requires each image's label in order to operate - something which
+            Augmentor was not designed to handle.
+
+        :param probability: Controls the probability that the operation is
+         performed when it is invoked in the pipeline.
+        :param alpha: The alpha parameter controls the strength of the
+         interpolation between image-label pairs. It's value can be any value
+         greater than 0. A smaller value for :attr:`alpha` results in more
+         values closer to 0 or 1, meaning the *mixup* is more often closer to
+         either of the images in the pair. Its value is set to 0.4 by default.
+        :type probability: Float
+        :type alpha: Float
+        """
+        Operation.__init__(self, probability)
+        self.alpha = alpha
+
+    def perform_operation(self, images):
+        """
+        This function is currently implemented but not **enabled**, as it
+        requires each image's label in order to operate - something which
+        Augmentor was not designed to handle.
+
+        This is therefore future work, and may only be possible when used in
+        combination with generators.
+        """
+
+        if self.alpha > 0:
+            lambda_value = np.random.beta(self.alpha, self.alpha)
+        else:
+            lambda_value = 1
+
+        def do(image1, image2, y1, y2):
+
+            image1 = np.asarray(image1)
+            image1 = image1.astype('float32')
+
+            image2 = np.asarray(image2)
+            image2 = image2.astype('float32')
+
+            mixup_x = lambda_value * image1 + (1 - lambda_value) * image2
+
+            mixup_y = lambda_value * y1 + (1 - lambda_value) * y2
+
+            return mixup_x, mixup_y
+
+        augmented_images = []
+
+        y1 = np.array([0.0, 1.0])
+        y2 = np.array([1.0, 0.0])
+
+        for image in images:
+            augmented_images.append(do(image, image, y1, y2))
+
+        return augmented_images
