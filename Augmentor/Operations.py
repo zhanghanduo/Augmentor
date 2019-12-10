@@ -1794,19 +1794,19 @@ class ZoomRandom(Operation):
          PIL.Image.
         """
 
-        if self.randomise:
-            r_percentage_area = round(random.uniform(0.1, self.percentage_area), 2)
-        else:
-            r_percentage_area = self.percentage_area
-
-        w, h = images[0].size
-        w_new = int(floor(w * r_percentage_area))
-        h_new = int(floor(h * r_percentage_area))
-
-        random_left_shift = random.randint(0, (w - w_new))  # Note: randint() is from uniform distribution.
-        random_down_shift = random.randint(0, (h - h_new))
-
         def do(image):
+            if self.randomise:
+                r_percentage_area = round(random.uniform(0.1, self.percentage_area), 2)
+            else:
+                r_percentage_area = self.percentage_area
+
+            w, h = images[0].size
+            w_new = int(floor(w * r_percentage_area))
+            h_new = int(floor(h * r_percentage_area))
+
+            random_left_shift = random.randint(0, (w - w_new))  # Note: randint() is from uniform distribution.
+            random_down_shift = random.randint(0, (h - h_new))
+
             image = image.crop((random_left_shift, random_down_shift, w_new + random_left_shift, h_new + random_down_shift))
 
             return image.resize((w, h), resample=Image.BICUBIC)
@@ -2065,12 +2065,11 @@ class Mixup(Operation):
 
     According to the paper referenced above, values for :math:`\\alpha`
     between 0.1 and 0.4 led to best performance. Smaller values for
-    :math:`\\alpha` result in less *mixup* effect where larger values would
+    :math:`\\alpha` result in less *mixup* effect whereas larger values would
     tend to result in overfitting.
     """
     def __init__(self, probability, alpha=0.4):
         """
-        Performs the *mixit* augmentation technique.
 
         .. note:: Not yet enabled!
             This function is currently implemented but not **enabled**, as it
