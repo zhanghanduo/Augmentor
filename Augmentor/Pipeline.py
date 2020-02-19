@@ -1668,6 +1668,20 @@ class Pipeline(object):
         else:
             self.add_operation(RandomErasing(probability=probability, rectangle_area=rectangle_area))
 
+    def multi_erasing(self, probability, max_x_axis, max_y_axis, max_num):
+
+        if not 0 < probability <= 1:
+            raise ValueError(Pipeline._probability_error_text)
+        elif not 0.1 < max_x_axis <= 1:
+            raise ValueError("The max x percentage must be between 0.1 and 1.")
+        elif not 0.1 < max_y_axis <= 1:
+            raise ValueError("The max y percentage must be between 0.1 and 1.")
+        elif not isinstance(max_num, int) and max_num > 0:
+            raise ValueError("The max num of erasing regions must be a positive integer.")
+        else:
+            self.add_operation(MultiErasing(probability=probability, max_x_axis=max_x_axis,
+                                            max_y_axis=max_y_axis, max_num=max_num))
+
     def ground_truth(self, ground_truth_directory):
         """
         Specifies a directory containing corresponding images that

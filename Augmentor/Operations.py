@@ -36,6 +36,7 @@ import os
 import random
 import warnings
 
+
 # Python 2-3 compatibility - not currently needed.
 # try:
 #    from StringIO import StringIO
@@ -51,6 +52,7 @@ class Operation(object):
     the section on extending Augmentor with custom operations at
     :ref:`extendingaugmentor`.
     """
+
     def __init__(self, probability):
         """
         All operations must at least have a :attr:`probability` which is
@@ -93,6 +95,7 @@ class HistogramEqualisation(Operation):
     The class :class:`HistogramEqualisation` is used to perform histogram
     equalisation on images passed to its :func:`perform_operation` function.
     """
+
     def __init__(self, probability):
         """
         As there are no further user definable parameters, the class is
@@ -116,6 +119,7 @@ class HistogramEqualisation(Operation):
         :return: The transformed image(s) as a list of object(s) of type
          PIL.Image.
         """
+
         # If an image is a colour image, the histogram will
         # will be computed on the flattened image, which fires
         # a warning.
@@ -140,6 +144,7 @@ class Greyscale(Operation):
 
     .. seealso:: The :class:`BlackAndWhite` class.
     """
+
     def __init__(self, probability):
         """
         As there are no further user definable parameters, the class is
@@ -178,6 +183,7 @@ class Invert(Operation):
     This class is used to negate images. That is to reverse the pixel values
     for any image processed by it.
     """
+
     def __init__(self, probability):
         """
         As there are no further user definable parameters, the class is
@@ -220,6 +226,7 @@ class BlackAndWhite(Operation):
 
     .. seealso:: The :class:`Greyscale` class.
     """
+
     def __init__(self, probability, threshold):
         """
         As well as the required :attr:`probability` parameter, a
@@ -270,6 +277,7 @@ class RandomBrightness(Operation):
     """
     This class is used to random change image brightness.
     """
+
     def __init__(self, probability, min_factor, max_factor):
         """
         required :attr:`probability` parameter
@@ -305,7 +313,6 @@ class RandomBrightness(Operation):
         factor = np.random.uniform(self.min_factor, self.max_factor)
 
         def do(image):
-
             image_enhancer_brightness = ImageEnhance.Brightness(image)
             return image_enhancer_brightness.enhance(factor)
 
@@ -321,6 +328,7 @@ class RandomColor(Operation):
     """
     This class is used to random change saturation of an image.
     """
+
     def __init__(self, probability, min_factor, max_factor):
         """
         required :attr:`probability` parameter
@@ -356,7 +364,6 @@ class RandomColor(Operation):
         factor = np.random.uniform(self.min_factor, self.max_factor)
 
         def do(image):
-
             image_enhancer_color = ImageEnhance.Color(image)
             return image_enhancer_color.enhance(factor)
 
@@ -372,7 +379,8 @@ class RandomContrast(Operation):
     """
     This class is used to random change contrast of an image.
     """
-    def __init__(self, probability, min_factor,max_factor):
+
+    def __init__(self, probability, min_factor, max_factor):
         """
         required :attr:`probability` parameter
 
@@ -407,7 +415,6 @@ class RandomContrast(Operation):
         factor = np.random.uniform(self.min_factor, self.max_factor)
 
         def do(image):
-
             image_enhancer_contrast = ImageEnhance.Contrast(image)
             return image_enhancer_contrast.enhance(factor)
 
@@ -424,6 +431,7 @@ class Skew(Operation):
     This class is used to perform perspective skewing on images. It allows
     for skewing from a total of 12 different perspectives.
     """
+
     def __init__(self, probability, skew_type, magnitude):
         """
         As well as the required :attr:`probability` parameter, the type of
@@ -532,25 +540,25 @@ class Skew(Operation):
             if skew_direction == 0:
                 # Left Tilt
                 new_plane = [(y1, x1 - skew_amount),  # Top Left
-                             (y2, x1),                # Top Right
-                             (y2, x2),                # Bottom Right
+                             (y2, x1),  # Top Right
+                             (y2, x2),  # Bottom Right
                              (y1, x2 + skew_amount)]  # Bottom Left
             elif skew_direction == 1:
                 # Right Tilt
-                new_plane = [(y1, x1),                # Top Left
+                new_plane = [(y1, x1),  # Top Left
                              (y2, x1 - skew_amount),  # Top Right
                              (y2, x2 + skew_amount),  # Bottom Right
-                             (y1, x2)]                # Bottom Left
+                             (y1, x2)]  # Bottom Left
             elif skew_direction == 2:
                 # Forward Tilt
                 new_plane = [(y1 - skew_amount, x1),  # Top Left
                              (y2 + skew_amount, x1),  # Top Right
-                             (y2, x2),                # Bottom Right
-                             (y1, x2)]                # Bottom Left
+                             (y2, x2),  # Bottom Right
+                             (y1, x2)]  # Bottom Left
             elif skew_direction == 3:
                 # Backward Tilt
-                new_plane = [(y1, x1),                # Top Left
-                             (y2, x1),                # Top Right
+                new_plane = [(y1, x1),  # Top Left
+                             (y2, x1),  # Top Right
                              (y2 + skew_amount, x2),  # Bottom Right
                              (y1 - skew_amount, x2)]  # Bottom Left
 
@@ -639,7 +647,7 @@ class RotateStandard(Operation):
         Documentation to appear.
         """
         Operation.__init__(self, probability)
-        self.max_left_rotation = -abs(max_left_rotation)   # Ensure always negative
+        self.max_left_rotation = -abs(max_left_rotation)  # Ensure always negative
         self.max_right_rotation = abs(max_right_rotation)  # Ensure always positive
         self.expand = expand
         self.fillcolor = fillcolor
@@ -758,6 +766,7 @@ class RotateRange(Operation):
     The :ref:`rotating` section describes this in detail and has example
     images to demonstrate this.
     """
+
     def __init__(self, probability, max_left_rotation, max_right_rotation):
         """
         As well as the required :attr:`probability` parameter, the
@@ -777,7 +786,7 @@ class RotateRange(Operation):
         :type max_right_rotation: Integer
         """
         Operation.__init__(self, probability)
-        self.max_left_rotation = -abs(max_left_rotation)   # Ensure always negative
+        self.max_left_rotation = -abs(max_left_rotation)  # Ensure always negative
         self.max_right_rotation = abs(max_right_rotation)  # Ensure always positive
 
     def perform_operation(self, images):
@@ -857,6 +866,7 @@ class Resize(Operation):
     """
     This class is used to resize images by absolute values passed as parameters.
     """
+
     def __init__(self, probability, width, height, resample_filter):
         """
         Accepts the required probability parameter as well as parameters
@@ -909,6 +919,7 @@ class Flip(Operation):
     The class allows an image to be mirrored along either
     its x axis or its y axis, or randomly.
     """
+
     def __init__(self, probability, top_bottom_left_right):
         """
         The direction of the flip, or whether it should be randomised, is
@@ -964,6 +975,7 @@ class Crop(Operation):
     """
     This class is used to crop images by absolute values passed as parameters.
     """
+
     def __init__(self, probability, width, height, centre):
         """
         As well as the always required :attr:`probability` parameter, the
@@ -1013,7 +1025,8 @@ class Crop(Operation):
                 return image
 
             if self.centre:
-                return image.crop(((w/2)-(self.width/2), (h/2)-(self.height/2), (w/2)+(self.width/2), (h/2)+(self.height/2)))
+                return image.crop(((w / 2) - (self.width / 2), (h / 2) - (self.height / 2), (w / 2) + (self.width / 2),
+                                   (h / 2) + (self.height / 2)))
             else:
                 return image.crop((left_shift, down_shift, self.width + left_shift, self.height + down_shift))
 
@@ -1029,6 +1042,7 @@ class CropPercentage(Operation):
     """
     This class is used to crop images by a percentage of their area.
     """
+
     def __init__(self, probability, percentage_area, centre, randomise_percentage_area):
         """
         As well as the always required :attr:`probability` parameter, the
@@ -1080,7 +1094,8 @@ class CropPercentage(Operation):
 
         def do(image):
             if self.centre:
-                return image.crop(((w/2)-(w_new/2), (h/2)-(h_new/2), (w/2)+(w_new/2), (h/2)+(h_new/2)))
+                return image.crop(
+                    ((w / 2) - (w_new / 2), (h / 2) - (h_new / 2), (w / 2) + (w_new / 2), (h / 2) + (h_new / 2)))
             else:
                 return image.crop((left_shift, down_shift, w_new + left_shift, h_new + down_shift))
 
@@ -1098,6 +1113,7 @@ class CropRandom(Operation):
      of the user-facing functions in the :class:`~Augmentor.Pipeline.Pipeline`
      class.
     """
+
     def __init__(self, probability, percentage_area):
         """
         :param probability: Controls the probability that the operation is
@@ -1128,7 +1144,8 @@ class CropRandom(Operation):
         random_down_shift = random.randint(0, int((h - h_new)))
 
         def do(image):
-            return image.crop((random_left_shift, random_down_shift, w_new + random_left_shift, h_new + random_down_shift))
+            return image.crop(
+                (random_left_shift, random_down_shift, w_new + random_left_shift, h_new + random_down_shift))
 
         augmented_images = []
 
@@ -1154,6 +1171,7 @@ class Shear(Operation):
 
     For sample code with image examples see :ref:`shearing`.
     """
+
     def __init__(self, probability, max_shear_left, max_shear_right):
         """
         The shearing is randomised in magnitude, from 0 to the
@@ -1207,7 +1225,7 @@ class Shear(Operation):
         # max_shear_left = 20
         # max_shear_right = 20
 
-        angle_to_shear = int(random.uniform((abs(self.max_shear_left)*-1) - 1, self.max_shear_right + 1))
+        angle_to_shear = int(random.uniform((abs(self.max_shear_left) * -1) - 1, self.max_shear_right + 1))
         if angle_to_shear != -1: angle_to_shear += 1
 
         # Alternative method
@@ -1310,6 +1328,7 @@ class Scale(Operation):
     This function will return images that are **larger** than the input
     images.
     """
+
     def __init__(self, probability, scale_factor):
         """
         As the aspect ratio is always kept constant, only a
@@ -1356,6 +1375,7 @@ class Distort(Operation):
     """
     This class performs randomised, elastic distortions on images.
     """
+
     def __init__(self, probability, grid_width, grid_height, magnitude):
         """
         As well as the probability, the granularity of the distortions
@@ -1439,7 +1459,7 @@ class Distort(Operation):
         # last_column = [(horizontal_tiles - 1) + horizontal_tiles * i for i in range(vertical_tiles)]
         last_column = []
         for i in range(vertical_tiles):
-            last_column.append((horizontal_tiles-1)+horizontal_tiles*i)
+            last_column.append((horizontal_tiles - 1) + horizontal_tiles * i)
 
         last_row = range((horizontal_tiles * vertical_tiles) - horizontal_tiles, horizontal_tiles * vertical_tiles)
 
@@ -1458,27 +1478,27 @@ class Distort(Operation):
 
             x1, y1, x2, y2, x3, y3, x4, y4 = polygons[a]
             polygons[a] = [x1, y1,
-                            x2, y2,
-                            x3 + dx, y3 + dy,
-                            x4, y4]
+                           x2, y2,
+                           x3 + dx, y3 + dy,
+                           x4, y4]
 
             x1, y1, x2, y2, x3, y3, x4, y4 = polygons[b]
             polygons[b] = [x1, y1,
-                            x2 + dx, y2 + dy,
-                            x3, y3,
-                            x4, y4]
+                           x2 + dx, y2 + dy,
+                           x3, y3,
+                           x4, y4]
 
             x1, y1, x2, y2, x3, y3, x4, y4 = polygons[c]
             polygons[c] = [x1, y1,
-                            x2, y2,
-                            x3, y3,
-                            x4 + dx, y4 + dy]
+                           x2, y2,
+                           x3, y3,
+                           x4 + dx, y4 + dy]
 
             x1, y1, x2, y2, x3, y3, x4, y4 = polygons[d]
             polygons[d] = [x1 + dx, y1 + dy,
-                            x2, y2,
-                            x3, y3,
-                            x4, y4]
+                           x2, y2,
+                           x3, y3,
+                           x4, y4]
 
         generated_mesh = []
         for i in range(len(dimensions)):
@@ -1500,6 +1520,7 @@ class GaussianDistortion(Operation):
     """
     This class performs randomised, elastic gaussian distortions on images.
     """
+
     def __init__(self, probability, grid_width, grid_height, magnitude, corner, method, mex, mey, sdx, sdy):
         """
         As well as the probability, the granularity of the distortions
@@ -1609,7 +1630,7 @@ class GaussianDistortion(Operation):
 
         last_column = []
         for i in range(vertical_tiles):
-            last_column.append((horizontal_tiles-1)+horizontal_tiles*i)
+            last_column.append((horizontal_tiles - 1) + horizontal_tiles * i)
 
         last_row = range((horizontal_tiles * vertical_tiles) - horizontal_tiles, horizontal_tiles * vertical_tiles)
 
@@ -1623,8 +1644,10 @@ class GaussianDistortion(Operation):
                 polygon_indices.append([i, i + 1, i + horizontal_tiles, i + 1 + horizontal_tiles])
 
         def sigmoidf(x, y, sdx=0.05, sdy=0.05, mex=0.5, mey=0.5, const=1):
-            sigmoid = lambda x1, y1:  (const * (math.exp(-(((x1-mex)**2)/sdx + ((y1-mey)**2)/sdy) )) + max(0,-const) - max(0, const))
-            xl = np.linspace(0,1)
+            sigmoid = lambda x1, y1: (
+                        const * (math.exp(-(((x1 - mex) ** 2) / sdx + ((y1 - mey) ** 2) / sdy))) + max(0, -const) - max(
+                    0, const))
+            xl = np.linspace(0, 1)
             yl = np.linspace(0, 1)
             X, Y = np.meshgrid(xl, yl)
 
@@ -1632,11 +1655,12 @@ class GaussianDistortion(Operation):
             mino = np.amin(Z)
             maxo = np.amax(Z)
             res = sigmoid(x, y)
-            res = max(((((res - mino) * (1 - 0)) / (maxo - mino)) + 0), 0.01)*self.magnitude
+            res = max(((((res - mino) * (1 - 0)) / (maxo - mino)) + 0), 0.01) * self.magnitude
             return res
 
         def corner(x, y, corner="ul", method="out", sdx=0.05, sdy=0.05, mex=0.5, mey=0.5):
-            ll = {'dr': (0, 0.5, 0, 0.5), 'dl': (0.5, 1, 0, 0.5), 'ur': (0, 0.5, 0.5, 1), 'ul': (0.5, 1, 0.5, 1), 'bell': (0, 1, 0, 1)}
+            ll = {'dr': (0, 0.5, 0, 0.5), 'dl': (0.5, 1, 0, 0.5), 'ur': (0, 0.5, 0.5, 1), 'ul': (0.5, 1, 0.5, 1),
+                  'bell': (0, 1, 0, 1)}
             new_c = ll[corner]
             new_x = (((x - 0) * (new_c[1] - new_c[0])) / (1 - 0)) + new_c[0]
             new_y = (((y - 0) * (new_c[3] - new_c[2])) / (1 - 0)) + new_c[2]
@@ -1644,10 +1668,10 @@ class GaussianDistortion(Operation):
                 const = 1
             else:
                 if method == "out":
-                    const =- 1
+                    const = - 1
                 else:
                     const = 1
-            res = sigmoidf(x=new_x, y=new_y,sdx=sdx, sdy=sdy, mex=mex, mey=mey, const=const)
+            res = sigmoidf(x=new_x, y=new_y, sdx=sdx, sdy=sdy, mex=mex, mey=mey, const=const)
 
             return res
 
@@ -1656,7 +1680,8 @@ class GaussianDistortion(Operation):
             for a, b, c, d in polygon_indices:
                 x1, y1, x2, y2, x3, y3, x4, y4 = polygons[a]
 
-                sigmax = corner(x=x3/w, y=y3/h, corner=self.corner, method=self.method, sdx=self.sdx, sdy=self.sdy, mex=self.mex, mey=self.mey)
+                sigmax = corner(x=x3 / w, y=y3 / h, corner=self.corner, method=self.method, sdx=self.sdx, sdy=self.sdy,
+                                mex=self.mex, mey=self.mey)
                 dx = np.random.normal(0, sigmax, 1)[0]
                 dy = np.random.normal(0, sigmax, 1)[0]
                 polygons[a] = [x1, y1,
@@ -1701,6 +1726,7 @@ class Zoom(Operation):
     This class is used to enlarge images (to zoom) but to return a cropped
     region of the zoomed image of the same size as the original image.
     """
+
     def __init__(self, probability, min_factor, max_factor):
         """
         The amount of zoom applied is randomised, from between
@@ -1739,7 +1765,7 @@ class Zoom(Operation):
 
             image_zoomed = image.resize((int(round(image.size[0] * factor)),
                                          int(round(image.size[1] * factor))),
-                                         resample=Image.BICUBIC)
+                                        resample=Image.BICUBIC)
             w_zoomed, h_zoomed = image_zoomed.size
 
             return image_zoomed.crop((floor((float(w_zoomed) / 2) - (float(w) / 2)),
@@ -1807,7 +1833,8 @@ class ZoomRandom(Operation):
         random_down_shift = random.randint(0, (h - h_new))
 
         def do(image):
-            image = image.crop((random_left_shift, random_down_shift, w_new + random_left_shift, h_new + random_down_shift))
+            image = image.crop(
+                (random_left_shift, random_down_shift, w_new + random_left_shift, h_new + random_down_shift))
 
             return image.resize((w, h), resample=Image.BICUBIC)
 
@@ -1823,6 +1850,7 @@ class HSVShifting(Operation):
     """
     CURRENTLY NOT IMPLEMENTED.
     """
+
     def __init__(self, probability, hue_shift, saturation_scale, saturation_shift, value_scale, value_shift):
         Operation.__init__(self, probability)
         self.hue_shift = hue_shift
@@ -1832,7 +1860,6 @@ class HSVShifting(Operation):
         self.value_shift = value_shift
 
     def perform_operation(self, images):
-
         def do(image):
             hsv = np.array(image.convert("HSV"), 'float64')
             hsv /= 255.
@@ -1869,6 +1896,7 @@ class RandomErasing(Operation):
 
     Random Erasing can make a trained neural network more robust to occlusion.
     """
+
     def __init__(self, probability, rectangle_area):
         """
         The size of the random rectangle is controlled using the
@@ -1909,7 +1937,8 @@ class RandomErasing(Operation):
             if len(image.getbands()) == 1:
                 rectangle = Image.fromarray(np.uint8(np.random.rand(w_occlusion, h_occlusion) * 255))
             else:
-                rectangle = Image.fromarray(np.uint8(np.random.rand(w_occlusion, h_occlusion, len(image.getbands())) * 255))
+                rectangle = Image.fromarray(
+                    np.uint8(np.random.rand(w_occlusion, h_occlusion, len(image.getbands())) * 255))
 
             random_position_x = random.randint(0, w - w_occlusion)
             random_position_y = random.randint(0, h - h_occlusion)
@@ -1926,11 +1955,88 @@ class RandomErasing(Operation):
         return augmented_images
 
 
+class MultiErasing(Operation):
+    """
+    Class that performs Random Erasing, an augmentation technique described
+    in `https://arxiv.org/abs/1708.04896 <https://arxiv.org/abs/1708.04896>`_
+    by Zhong et al. To quote the authors, random erasing:
+
+    "*... randomly selects multiple rectangle regions in an image, and erases
+    their pixels with random values.*"
+
+    Exactly this is provided by this class.
+
+    Multiple Random Erasing can make a trained neural network more robust to occlusion.
+    """
+
+    def __init__(self, probability, max_x_axis, max_y_axis, max_num):
+        """
+        The size of the random rectangle is controlled using the
+        :attr:`rectangle_area` parameter. This area is random in its
+        width and height.
+
+        :param probability: The probability that the operation will be
+         performed.
+        :param max_x_axis: The max percentage of horizontal axis of the image to occlude.
+        :param max_y_axis: The max percentage of vertical axis of the image to occlude.
+        :param max_num: The max number of rectangels to be generated.
+        """
+        Operation.__init__(self, probability)
+        self.max_x_axis = max_x_axis
+        self.max_y_axis = max_y_axis
+        self.max_num = max_num
+
+    def perform_operation(self, images):
+        """
+        Adds a random noise rectangle to a random area of the passed image,
+        returning the original image with this rectangle superimposed.
+
+        :param images: The image(s) to add a random noise rectangle to.
+        :type images: List containing PIL.Image object(s).
+        :return: The transformed image(s) as a list of object(s) of type
+         PIL.Image.
+        """
+
+        def do(image):
+
+            w, h = image.size
+
+            w_occlusion_max = int(w * self.max_x_axis)
+            h_occlusion_max = int(h * self.max_y_axis)
+
+            w_occlusion_min = int(w * 0.1)
+            h_occlusion_min = int(h * 0.1)
+
+            num_erase = random.randint(1, self.max_num)
+
+            for erase_ in range(num_erase):
+                w_occlusion = random.randint(w_occlusion_min, w_occlusion_max)
+                h_occlusion = random.randint(h_occlusion_min, h_occlusion_max)
+                if len(image.getbands()) == 1:
+                    rectangle = Image.fromarray(np.uint8(np.random.rand(h_occlusion, w_occlusion) * 255))
+                else:
+                    rectangle = Image.fromarray(
+                        np.uint8(np.random.rand(h_occlusion, w_occlusion, len(image.getbands())) * 255))
+                random_position_x = random.randint(0, w - w_occlusion)
+                random_position_y = random.randint(h//2, h - h_occlusion)
+                image.paste(rectangle, (random_position_x, random_position_y))
+
+            return image
+
+        augmented_images = []
+
+        for image in images:
+            augmented_images.append(do(image))
+
+        return augmented_images
+
+
 class Custom(Operation):
     """
     Class that allows for a custom operation to be performed using Augmentor's
     standard :class:`~Augmentor.Pipeline.Pipeline` object.
     """
+
     def __init__(self, probability, custom_function, **function_arguments):
         """
         Creates a custom operation that can be added to a pipeline.
@@ -1977,6 +2083,7 @@ class ZoomGroundTruth(Operation):
     This class is used to enlarge images (to zoom) but to return a cropped
     region of the zoomed image of the same size as the original image.
     """
+
     def __init__(self, probability, min_factor, max_factor):
         """
         The amount of zoom applied is randomised, from between
@@ -2010,11 +2117,11 @@ class ZoomGroundTruth(Operation):
         factor = round(random.uniform(self.min_factor, self.max_factor), 2)
 
         def do(image):
-
             w, h = image.size
 
             # TODO: Join these two functions together so that we don't have this image_zoom variable lying around.
-            image_zoomed = image.resize((int(round(image.size[0] * factor)), int(round(image.size[1] * factor))), resample=Image.BICUBIC)
+            image_zoomed = image.resize((int(round(image.size[0] * factor)), int(round(image.size[1] * factor))),
+                                        resample=Image.BICUBIC)
             w_zoomed, h_zoomed = image_zoomed.size
 
             return image_zoomed.crop((floor((float(w_zoomed) / 2) - (float(w) / 2)),
@@ -2068,6 +2175,7 @@ class Mixup(Operation):
     :math:`\\alpha` result in less *mixup* effect whereas larger values would
     tend to result in overfitting.
     """
+
     def __init__(self, probability, alpha=0.4):
         """
 
